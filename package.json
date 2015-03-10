@@ -1,7 +1,8 @@
 {
   "name": "seaport-advert",
   "version": "1.0.0",
-  "description": "Advertise your seaport using multicast-dns for easy setup",
+  "description": "Advertise and find your seaport using multicast-dns for easy setup",
+  "bin": "bin.js",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/ryanramage/seaport-advert/issues"
   },
-  "homepage": "https://github.com/ryanramage/seaport-advert"
+  "homepage": "https://github.com/ryanramage/seaport-advert",
+  "dependencies": {
+    "hostile": "^1.0.0",
+    "multicast-dns": "^2.0.0",
+    "network-address": "^1.0.0"
+  }
 }
