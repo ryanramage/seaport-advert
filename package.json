@@ -1,6 +1,6 @@
 {
   "name": "seaport-advert",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Advertise and find your seaport using multicast-dns for easy setup",
   "bin": "bin.js",
   "main": "index.js",

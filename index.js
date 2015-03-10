@@ -16,10 +16,11 @@ exports.find = function(opts, cb) {
 		port: null
 	}
 	var timeoutID = setTimeout(function(){
+		mdns.destroy();
 		cb(new Error('Timeout on find'));
 	}, opts.timeout || 5000);
 
-	mdns.on('response', function(response) {
+	mdns.once('response', function(response) {
 
 	  response.answers.forEach(function(a){
 	  	if (a.name !== name) return;
@@ -28,7 +29,7 @@ exports.find = function(opts, cb) {
 	  	reply.host = a.data.target;
 	  	reply.port = a.data.port;
 	  })
-
+	  mdns.destroy();
 	  cb(null, reply);
 
 	})
