@@ -1,0 +1,23 @@
+{
+  "name": "seaport-advert",
+  "version": "1.0.0",
+  "description": "Advertise your seaport using multicast-dns for easy setup",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ryanramage/seaport-advert.git"
+  },
+  "keywords": [
+    "seaport",
+    "mdns"
+  ],
+  "author": "Ryan Ramage",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ryanramage/seaport-advert/issues"
+  },
+  "homepage": "https://github.com/ryanramage/seaport-advert"
+}
