@@ -11,10 +11,7 @@ exports.find = function(opts, cb) {
 
 	var mdns = multicast();
 	var name = opts.name || 'seaport';
-	var reply = {
-		host: null, 
-		port: null
-	}
+
 	var timeoutID = setTimeout(function(){
 		mdns.destroy();
 		cb(new Error('Timeout on find'));
@@ -26,10 +23,8 @@ exports.find = function(opts, cb) {
 			var a = response.answers[i]
 	  	if (a.name === name) {
 		  	clearTimeout(timeoutID);
-		  	reply.host = a.data.target;
-		  	reply.port = a.data.port;
 		  	mdns.destroy();
-		  	return cb(null, reply);
+		  	return cb(null, a.data);
 	  	}
 		}
 	})
@@ -70,7 +65,7 @@ exports.advert = function(port, opts) {
 		query.questions.forEach(function(q) { 
 			if (q.name !== name) return;
 			get_ip(function(err, ip){
-				data.target = ip;
+				data.host = ip;
 
 				mdns.respond({
 				  answers: [{
