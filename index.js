@@ -65,7 +65,7 @@ exports.advert = function(port, opts) {
 		query.questions.forEach(function(q) {
 			if (q.name !== name) return;
 			get_ip(function(err, ip){
-				data.target = ip;
+
 				data.host = ip;
 
 				mdns.respond({
