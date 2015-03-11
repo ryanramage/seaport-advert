@@ -20,18 +20,18 @@ exports.find = function(opts, cb) {
 		cb(new Error('Timeout on find'));
 	}, opts.timeout || 5000);
 
-	mdns.once('response', function(response) {
+	mdns.on('response', function(response) {
 
-	  response.answers.forEach(function(a){
-	  	if (a.name !== name) return;
-
-	  	clearTimeout(timeoutID);
-	  	reply.host = a.data.target;
-	  	reply.port = a.data.port;
-	  })
-	  mdns.destroy();
-	  cb(null, reply);
-
+		for (var i = response.answers.length - 1; i >= 0; i--) {
+			var a = response.answers[i]
+	  	if (a.name === name) {
+		  	clearTimeout(timeoutID);
+		  	reply.host = a.data.target;
+		  	reply.port = a.data.port;
+		  	mdns.destroy();
+		  	return cb(null, reply);
+	  	}
+		}
 	})
 	mdns.query({
 	  questions:[{
@@ -49,7 +49,9 @@ exports.advert = function(port, opts) {
 	var mdns = multicast();
 	var name = opts.name || 'seaport';
 	var ip = opts.ip || null;
+	var data = opts.data || {}
 
+	data.port = port;
 
 	var get_ip = function(cb){
 		if (ip) return cb(null, ip);
@@ -68,14 +70,13 @@ exports.advert = function(port, opts) {
 		query.questions.forEach(function(q) { 
 			if (q.name !== name) return;
 			get_ip(function(err, ip){
+				data.target = ip;
+
 				mdns.respond({
 				  answers: [{
 				    name: name,
 				    type: 'SRV',
-				    data: {
-				      port:port,
-				      target: ip
-				    }
+				    data: data
 				  }]
 				})  
 			})
