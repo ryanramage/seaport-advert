@@ -3,7 +3,7 @@ var address = require('network-address');
 var hostile = require('hostile');
 
 exports.find = function(opts, cb) {
-	
+
 	if (!cb) {
 		cb = opts;
 		opts = {};
@@ -22,9 +22,9 @@ exports.find = function(opts, cb) {
 		for (var i = response.answers.length - 1; i >= 0; i--) {
 			var a = response.answers[i]
 	  	if (a.name === name) {
-		  	clearTimeout(timeoutID);
-		  	mdns.destroy();
-		  	return cb(null, a.data);
+				clearTimeout(timeoutID);
+				mdns.destroy();
+				return cb(null, JSON.parse(a.data));
 	  	}
 		}
 	})
@@ -33,13 +33,13 @@ exports.find = function(opts, cb) {
 	    name: name,
 	    type: 'SRV'
 	  }]
-	})	
+	})
 }
 
 
 exports.advert = function(port, opts) {
 	if (!opts) opts = {};
-	
+
 
 	var mdns = multicast();
 	var name = opts.name || 'seaport';
@@ -58,24 +58,25 @@ exports.advert = function(port, opts) {
 
 			ip = lines[0][0];
 			return cb(null, ip);
-		})	
+		})
 	}
 
 	mdns.on('query', function(query) {
-		query.questions.forEach(function(q) { 
+		query.questions.forEach(function(q) {
 			if (q.name !== name) return;
 			get_ip(function(err, ip){
+				data.target = ip;
 				data.host = ip;
 
 				mdns.respond({
 				  answers: [{
 				    name: name,
-				    type: 'SRV',
-				    data: data
+				    type: 'TXT',
+				    data: JSON.stringify(data)
 				  }]
-				})  
+				})
 			})
-		}) 
+		})
 	})
 
 }
